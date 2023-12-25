@@ -1,0 +1,10 @@
+/* #waveform ::part(wrapper) {
+  padding: 0 50vw;
+} */
+/* #waveform ::part(progress) {
+  padding: 0 50vw;
+} */
+
+#waveform ::part(canvases) {
+  padding: 0 50vw;
+}
