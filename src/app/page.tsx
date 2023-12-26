@@ -1,9 +1,17 @@
 "use client";
-import { Button, Layout } from "antd";
+import { Button } from "antd";
 import { useState } from "react";
-const { Header, Sider, Content } = Layout;
 
 export default function Home() {
   const [collapsed, setCollapsed] = useState(false);
-  return <Button>Jump to audio</Button>;
+  return (
+    <Button
+      onClick={() => {
+        console.log("click");
+        window.location.href = "/wave";
+      }}
+    >
+      Jump to Wave
+    </Button>
+  );
 }
