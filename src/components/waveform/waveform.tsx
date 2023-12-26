@@ -1,20 +1,16 @@
 "use client";
 
-import { throttle } from "@/tools/limit";
-import { Button, Progress } from "antd";
+import { Progress } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
-// Import WaveSurfer
 import WaveSurfer, { WaveSurferOptions } from "wavesurfer.js";
+import "./waveform.css";
 
-// WaveSurfer hook
 const useWavesurfer = (
   containerRef: React.RefObject<HTMLDivElement>,
-  options: WaveSurferOptions
+  options: WaveSurferPlayerOptions
 ) => {
   const [wavesurfer, setWavesurfer] = useState<WaveSurfer>();
 
-  // Initialize wavesurfer when the container mounts
-  // or any of the props change
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -28,27 +24,30 @@ const useWavesurfer = (
     return () => {
       ws.destroy();
     };
-  }, [options, containerRef]);
+  }, [containerRef]);
+
+  useEffect(() => {
+    wavesurfer?.zoom(options.minPxPerSec!);
+  }, [options.minPxPerSec]);
 
   return wavesurfer;
 };
 
-// Create a React component that will render wavesurfer.
-// Props are wavesurfer options.
-const WaveSurferPlayer = (props: WaveSurferOptions) => {
+interface WaveSurferPlayerOptions extends Omit<WaveSurferOptions, "container"> {
+  setWavesurfer(ws: WaveSurfer): void;
+}
+
+const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
   const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const wavesurfer = useWavesurfer(containerRef, props);
 
-  // On play button click
   const onPlayClick = useCallback(() => {
     wavesurfer?.isPlaying() ? wavesurfer?.pause() : wavesurfer?.play();
   }, [wavesurfer]);
 
-  // Initialize wavesurfer when the container mounts
-  // or any of the props change
   useEffect(() => {
     if (!wavesurfer) return;
 
@@ -56,21 +55,12 @@ const WaveSurferPlayer = (props: WaveSurferOptions) => {
     setIsPlaying(false);
 
     const subscriptions = [
+      wavesurfer.on("ready", () => {
+        props.setWavesurfer(wavesurfer);
+      }),
       wavesurfer.on("loading", (percent) => {
         setProgress(percent);
         console.log("Loading", percent + "%");
-      }),
-      wavesurfer.on("ready", () => {
-        document!
-          .querySelector(".waveform div")!
-          .shadowRoot.querySelector(".scroll")!
-          .addEventListener(
-            "scroll",
-            throttle((e) => {
-              console.log(e, e.target);
-            }),
-            250
-          );
       }),
       wavesurfer.on("play", () => setIsPlaying(true)),
       wavesurfer.on("pause", () => setIsPlaying(false)),
@@ -88,14 +78,13 @@ const WaveSurferPlayer = (props: WaveSurferOptions) => {
       <div
         className="waveform"
         ref={containerRef}
-        style={{ minHeight: "120px" }}
+        style={{
+          background: "white",
+          borderRadius: "10px",
+          padding: "0rem 1rem",
+          margin: "0 auto",
+        }}
       />
-
-      <Button onClick={onPlayClick} style={{ marginTop: "1em" }}>
-        {isPlaying ? "Pause" : "Play"}
-      </Button>
-
-      <p>当前播放: {currentTime}</p>
     </>
   );
 };

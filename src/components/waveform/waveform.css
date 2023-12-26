@@ -1,10 +1,14 @@
 /* #waveform ::part(wrapper) {
   padding: 0 50vw;
 } */
-/* #waveform ::part(progress) {
+/* .waveform ::part(progress) {
   padding: 0 50vw;
 } */
 
-#waveform ::part(canvases) {
+/* .waveform ::part(canvases) {
   padding: 0 50vw;
-}
+} */
+
+/* :host .canvases {
+  padding: 0 50vw;
+} */

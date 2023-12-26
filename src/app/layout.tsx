@@ -1,12 +1,11 @@
 "use client";
 import {
+  HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  SoundOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Skeleton } from "antd";
 import React, { useEffect, useState } from "react";
 import "./globals.css";
 import "./layout.css";
@@ -15,18 +14,15 @@ const { Header, Sider, Content } = Layout;
 const items = [
   {
     key: "1",
-    icon: <UserOutlined />,
+    url: "/",
+    icon: <HomeOutlined />,
     label: "Home",
   },
   {
     key: "2",
-    icon: <VideoCameraOutlined />,
-    label: "nav 2",
-  },
-  {
-    key: "3",
-    icon: <UploadOutlined />,
-    label: "nav 3",
+    url: "/wave",
+    icon: <SoundOutlined />,
+    label: "Wave",
   },
 ];
 
@@ -43,10 +39,19 @@ export default function RootLayout({
   return (
     <html className={loaded ? "" : "hide"}>
       <body>
-        <Layout>
+        {!loaded && <Skeleton active />}
+        <Layout className="main-layout">
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="logo" />
-            <Menu theme="dark" defaultSelectedKeys={["1"]} items={items} />
+            <Menu
+              theme="dark"
+              onClick={(e) => {
+                const { item, key, keyPath, domEvent } = e;
+                console.log(item, key, keyPath, domEvent);
+              }}
+              defaultSelectedKeys={["1"]}
+              items={items}
+            />
           </Sider>
           <Layout className="site-layout">
             <Header

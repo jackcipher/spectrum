@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "next": "14.0.4",
+    "pitchfinder": "^2.3.2",
     "react": "^18",
     "react-dom": "^18",
     "wavesurfer.js": "^7.5.4"
