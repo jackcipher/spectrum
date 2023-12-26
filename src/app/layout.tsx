@@ -7,10 +7,28 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./globals.css";
+import "./layout.css";
 
 const { Header, Sider, Content } = Layout;
+const items = [
+  {
+    key: "1",
+    icon: <UserOutlined />,
+    label: "Home",
+  },
+  {
+    key: "2",
+    icon: <VideoCameraOutlined />,
+    label: "nav 2",
+  },
+  {
+    key: "3",
+    icon: <UploadOutlined />,
+    label: "nav 3",
+  },
+];
 
 export default function RootLayout({
   children,
@@ -18,34 +36,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setLoaded(true);
+  });
   return (
-    <html>
+    <html className={loaded ? "" : "hide"}>
       <body>
         <Layout>
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="logo" />
-            <Menu
-              theme="dark"
-              // mode="inline"
-              defaultSelectedKeys={["1"]}
-              items={[
-                {
-                  key: "1",
-                  icon: <UserOutlined />,
-                  label: "Home",
-                },
-                {
-                  key: "2",
-                  icon: <VideoCameraOutlined />,
-                  label: "nav 2",
-                },
-                {
-                  key: "3",
-                  icon: <UploadOutlined />,
-                  label: "nav 3",
-                },
-              ]}
-            />
+            <Menu theme="dark" defaultSelectedKeys={["1"]} items={items} />
           </Sider>
           <Layout className="site-layout">
             <Header
