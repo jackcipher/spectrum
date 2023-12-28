@@ -48,6 +48,33 @@ const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
     wavesurfer?.isPlaying() ? wavesurfer?.pause() : wavesurfer?.play();
   }, [wavesurfer]);
 
+  const fixPosition = (force = false) => {
+    if (!wavesurfer) return;
+    const duration = wavesurfer.getDuration();
+        if ((wavesurfer.isPlaying() || force) && containerRef.current) {
+          const currentTime = wavesurfer.getCurrentTime();
+          const progress = currentTime / duration;
+          const wrapper = wavesurfer.getWrapper();
+          const xScroll = wrapper.scrollWidth * progress;
+          const innerContainer = wrapper.parentElement as HTMLElement;
+          // 将进度条强制居中
+          if (innerContainer) {
+            // 最开始部分
+            if (innerContainer.clientWidth / 2 > xScroll) {
+              innerContainer.style.transform = `translateX(${innerContainer.clientWidth / 2 - xScroll}px)`;
+            }
+            // 结束部分
+            else if (innerContainer.clientWidth / 2 + xScroll > wrapper.scrollWidth) {
+              innerContainer.style.transform = `translateX(${wrapper.scrollWidth - xScroll - innerContainer.clientWidth / 2}px)`;
+            }
+            else {
+              innerContainer.style.transform = `unset;`;
+              innerContainer.scrollLeft = xScroll - innerContainer.clientWidth / 2;
+            }
+          }
+        }
+  }
+
   useEffect(() => {
     if (!wavesurfer) return;
 
@@ -58,6 +85,7 @@ const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
       wavesurfer.on("ready", () => {
         if (props.setWavesurfer) {
           props.setWavesurfer(wavesurfer!);
+          fixPosition(true);
         }
       }),
       wavesurfer.on("loading", (percent) => {
@@ -68,6 +96,10 @@ const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
       wavesurfer.on("play", () => setIsPlaying(true)),
       wavesurfer.on("pause", () => setIsPlaying(false)),
       wavesurfer.on("timeupdate", (currentTime) => setCurrentTime(currentTime)),
+
+      wavesurfer.on("audioprocess", () => {
+        fixPosition();
+      })
     ];
 
     return () => {
@@ -85,6 +117,7 @@ const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
           borderRadius: "10px",
           padding: "0rem 1rem",
           margin: "0 auto",
+          overflowX: "hidden"
         }}
       />
     </>

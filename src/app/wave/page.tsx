@@ -97,8 +97,10 @@ const Home = () => {
           height={100}
           waveColor="#C4C4C4"
           progressColor="#FE6E00"
+          autoScroll={true}
           autoCenter={true}
           hideScrollbar={true}
+          dragToSeek={true}
           minPxPerSec={50}
           plugins={[bottomTimline]}
         />
