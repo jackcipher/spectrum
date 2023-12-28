@@ -1,19 +1,39 @@
+$primary-color: #fff;
+$border-radius: 10px;
+$btn-primary-color: black;
+$btn-default-font-size: 28px;
+$btn-primary-font-size: 36px;
+$btn-default-wrap-size: 32px;
+$btn-primary-wrap-size: 48px;
+
 .wrapper {
-  width: 200px;
-  border-radius: 10px;
-  background: white;
+  width: 260px;
+  border-radius: $border-radius;
+  background: $primary-color;
   padding: 10px 20px;
   margin: 10px 0;
+
   .btn {
-    &.primary {
-      font-size: 32px;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     cursor: pointer;
-    color: rgb(68, 68, 122);
-    font-size: 28px;
-    &:hover {
-      color: rgb(116, 116, 171);
+    width: $btn-default-wrap-size;
+    height: $btn-default-wrap-size;
+    font-size: $btn-default-font-size;
+
+    &.primary {
+      font-size: $btn-primary-font-size;
+      height: $btn-primary-wrap-size;
+      width: $btn-primary-wrap-size;
+    }
+
+    &:active {
+      border-radius: 50%;
+      transform: translateZ(0);
+      background: #dadbdc;
+      color: #0000008a;
     }
   }
 }
