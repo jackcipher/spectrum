@@ -1,0 +1,19 @@
+.wrapper {
+  width: 200px;
+  border-radius: 10px;
+  background: white;
+  padding: 10px 20px;
+  margin: 10px 0;
+  .btn {
+    &.primary {
+      font-size: 32px;
+    }
+    border: none;
+    cursor: pointer;
+    color: rgb(68, 68, 122);
+    font-size: 28px;
+    &:hover {
+      color: rgb(116, 116, 171);
+    }
+  }
+}
