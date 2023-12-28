@@ -1,6 +1,5 @@
 "use client";
 
-import { Progress } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import WaveSurfer, { WaveSurferOptions } from "wavesurfer.js";
 import "./waveform.css";
@@ -34,7 +33,8 @@ const useWavesurfer = (
 };
 
 interface WaveSurferPlayerOptions extends Omit<WaveSurferOptions, "container"> {
-  setWavesurfer(ws: WaveSurfer): void;
+  setWavesurfer?(ws: WaveSurfer): void;
+  setLoadingProgress?(percent: number): void;
 }
 
 const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
@@ -56,11 +56,14 @@ const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
 
     const subscriptions = [
       wavesurfer.on("ready", () => {
-        props.setWavesurfer(wavesurfer);
+        if (props.setWavesurfer) {
+          props.setWavesurfer(wavesurfer!);
+        }
       }),
       wavesurfer.on("loading", (percent) => {
-        setProgress(percent);
-        console.log("Loading", percent + "%");
+        if (props.setLoadingProgress) {
+          props.setLoadingProgress(percent);
+        }
       }),
       wavesurfer.on("play", () => setIsPlaying(true)),
       wavesurfer.on("pause", () => setIsPlaying(false)),
@@ -74,7 +77,6 @@ const WaveSurferPlayer = (props: WaveSurferPlayerOptions) => {
 
   return (
     <>
-      <Progress percent={progress} />
       <div
         className="waveform"
         ref={containerRef}
