@@ -1,15 +1,13 @@
-import {
-  EnvironmentFilled,
-  FastBackwardFilled,
-  FastForwardFilled,
-} from "@ant-design/icons";
 import { Flex, Slider } from "antd";
 import { useState } from "react";
 import styles from "./control.module.scss";
 import BackwardIcon from "./svg/backward.svg";
 import ForwardIcon from "./svg/forward.svg";
+import MarkIcon from "./svg/mark.svg";
+import NextLoopIcon from "./svg/next-loop.svg";
 import PauseIcon from "./svg/pause.svg";
 import PlayIcon from "./svg/play.svg";
+import PrevLoopIcon from "./svg/prev-loop.svg";
 
 interface ControlProp {
   onZoomChange?(v: number): void;
@@ -32,14 +30,14 @@ const Control = (prop: ControlProp) => {
     <>
       <Flex className={styles.wrapper} vertical align="center">
         <Flex>
-          <div className={styles.btn}>
-            <FastBackwardFilled />
+          <div className={styles.btn} onClick={prop.onPrevLoopClick}>
+            <PrevLoopIcon />
           </div>
-          <div className={styles.btn}>
-            <EnvironmentFilled />
+          <div className={styles.btn} onClick={prop.onLoopSetClick}>
+            <MarkIcon />
           </div>
-          <div className={styles.btn}>
-            <FastForwardFilled />
+          <div className={styles.btn} onClick={prop.onNextLoopClick}>
+            <NextLoopIcon />
           </div>
         </Flex>
         <Flex align="center">
