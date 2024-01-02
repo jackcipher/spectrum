@@ -13,7 +13,7 @@
     "pitchfinder": "^2.3.2",
     "react": "^18",
     "react-dom": "^18",
-    "wavesurfer.js": "^7.5.4"
+    "wavesurfer.js": "^7.6.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

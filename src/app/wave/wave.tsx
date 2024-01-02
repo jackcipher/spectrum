@@ -5,20 +5,19 @@ import WaveSurferPlayer, {
 } from "@/components/waveform/waveform";
 import { Flex, Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
-import TimelinePlugin from "wavesurfer.js/dist/plugins/timeline.js";
 import Control from "./control";
 
 const Home = () => {
   const waveRef = useRef<WaveSurferPlayerRef>(null);
-  const bottomTimline = TimelinePlugin.create({
-    height: 10,
-    timeInterval: 0.1,
-    primaryLabelInterval: 10,
-    style: {
-      fontSize: "10px",
-      color: "#6A3274",
-    },
-  });
+  // const bottomTimline = TimelinePlugin.create({
+  //   height: 10,
+  //   timeInterval: 0.1,
+  //   primaryLabelInterval: 10,
+  //   style: {
+  //     fontSize: "10px",
+  //     color: "#6A3274",
+  //   },
+  // });
 
   const [loaded, setLoaded] = useState(false);
   const [audioURL, setAudioURL] = useState("/demo.mp3");
@@ -41,10 +40,9 @@ const Home = () => {
           progressColor="#FE6E00"
           autoCenter={true}
           autoScroll={true}
-          dragToSeek={true}
+          dragToSeek={false}
           hideScrollbar={false}
           minPxPerSec={50}
-          plugins={[bottomTimline]}
         />
       </Spin>
       <Spin spinning={!loaded}>
