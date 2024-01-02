@@ -30,9 +30,10 @@ export default function RootLayout({
   const [collapsed, setCollapsed] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     setLoaded(true);
-  });
+  }, []);
 
   return (
     <html className={loaded ? "" : "hide"}>

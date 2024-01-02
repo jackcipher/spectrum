@@ -32,10 +32,12 @@ const useWavesurfer = (
     return () => {
       ws.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef]);
 
   useEffect(() => {
     wavesurfer?.zoom(options.minPxPerSec!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options.minPxPerSec]);
   return wavesurfer;
 };
@@ -275,6 +277,7 @@ const WaveSurferPlayer = forwardRef(
       return () => {
         subscriptions.forEach((unsub) => unsub());
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wavesurfer, state]);
 
     return (
@@ -294,5 +297,6 @@ const WaveSurferPlayer = forwardRef(
     );
   }
 );
+WaveSurferPlayer.displayName = "WaveSurferPlayer";
 
 export default WaveSurferPlayer;
