@@ -7,11 +7,11 @@ $btn-default-wrap-size: 32px;
 $btn-primary-wrap-size: 48px;
 
 .wrapper {
-  width: 180px;
+  width: 240px;
   border-radius: $border-radius;
   background: $primary-color;
-  // padding: 6px 8px;
-  margin: 10px 0;
+  padding: 6px 8px;
+  margin: 20px 0;
 
   .btn {
     display: flex;
