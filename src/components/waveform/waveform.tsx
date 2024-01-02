@@ -1,5 +1,6 @@
 "use client";
 
+import IndicatorPlugin from "@/app/wave/plugins/indicator";
 import {
   Ref,
   forwardRef,
@@ -42,7 +43,8 @@ const useWavesurfer = (
   return wavesurfer;
 };
 
-interface WaveSurferPlayerOptions extends Omit<WaveSurferOptions, "container"> {
+interface WaveSurferPlayerOptions
+  extends Omit<WaveSurferOptions, "container" | "plugins"> {
   onLoaded?(ws: WaveSurfer): void;
 }
 
@@ -104,6 +106,8 @@ const WaveSurferPlayer = forwardRef(
         color: "#6A3274",
       },
     });
+
+    const indicator = IndicatorPlugin.create({});
 
     useImperativeHandle(ref, () => ({
       forward(seconds: number) {
@@ -176,7 +180,12 @@ const WaveSurferPlayer = forwardRef(
       nextLoop() {},
     }));
 
-    const plugins = [topTimeline, bottomTimline, RegionsPlugin.create()];
+    const plugins = [
+      topTimeline,
+      bottomTimline,
+      RegionsPlugin.create(),
+      indicator,
+    ];
     const wavesurfer = useWavesurfer(containerRef, plugins, props);
 
     const reducer = (state: PlayerState, action: PlayerAction): PlayerState => {
@@ -215,40 +224,6 @@ const WaveSurferPlayer = forwardRef(
       duration: 0,
     });
 
-    const fixPosition = (force = false) => {
-      if (!wavesurfer) return;
-      const duration = wavesurfer.getDuration();
-      if ((wavesurfer.isPlaying() || force) && containerRef.current) {
-        const currentTime = wavesurfer.getCurrentTime();
-        const progress = currentTime / duration;
-        const wrapper = wavesurfer.getWrapper();
-        const xScroll = wrapper.scrollWidth * progress;
-        const innerContainer = wrapper.parentElement as HTMLElement;
-        // 将进度条强制居中
-        if (innerContainer) {
-          // 最开始部分
-          if (innerContainer.clientWidth / 2 > xScroll) {
-            innerContainer.style.transform = `translateX(${
-              innerContainer.clientWidth / 2 - xScroll
-            }px)`;
-          }
-          // 结束部分
-          else if (
-            innerContainer.clientWidth / 2 + xScroll >
-            wrapper.scrollWidth
-          ) {
-            innerContainer.style.transform = `translateX(${
-              wrapper.scrollWidth - xScroll - innerContainer.clientWidth / 2
-            }px)`;
-          } else {
-            innerContainer.style.transform = `unset;`;
-            innerContainer.scrollLeft =
-              xScroll - innerContainer.clientWidth / 2;
-          }
-        }
-      }
-    };
-
     useEffect(() => {
       if (!wavesurfer) return;
       const subscriptions = [
@@ -262,7 +237,6 @@ const WaveSurferPlayer = forwardRef(
           });
           if (props.onLoaded) {
             props.onLoaded(wavesurfer);
-            fixPosition(true);
           }
         }),
         wavesurfer.on("loading", (percent) => {}),
@@ -271,7 +245,6 @@ const WaveSurferPlayer = forwardRef(
           if (state.enableLoop && state.loopEnd > 0 && ct > state.loopEnd) {
             wavesurfer.setTime(state.loopStart);
           }
-          fixPosition();
         }),
       ];
       return () => {
@@ -288,7 +261,6 @@ const WaveSurferPlayer = forwardRef(
           style={{
             background: "white",
             borderRadius: "10px",
-            padding: "0rem 1rem",
             margin: "0 auto",
             overflowX: "hidden",
           }}
